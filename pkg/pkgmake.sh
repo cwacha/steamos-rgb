@@ -35,37 +35,34 @@ _template() {
 import() {
     echo "##### importing"
     [ -d BUILD ] && rm -rf BUILD
-    $deckuser=/home/deck
-    $rootuser=/root
+    deckuser=/home/deck
+    rootuser=/root
     mkdir BUILD
-    mkdir -p BUILD/lib/systemd/system-sleep
-    mkdir -p BUILD/$deckuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
-    mkdir -p BUILD/$rootuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
-    mkdir -p BUILD/$deckuser/.local/share/flatpak/overrides
-    mkdir -p BUILD/$rootuser/.local/share/flatpak/overrides
+    mkdir -p BUILD/usr/lib/systemd/system-sleep
+    mkdir -p BUILD/usr/lib/systemd/system
+    mkdir -p BUILD/usr/share/steamos-rgb
     
-    cp ../src/rgb-control.sh BUILD/lib/systemd/system-sleep
-    cp ../src/*.orp BUILD/$deckuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
-    cp ../src/*.orp BUILD/$rootuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
-    cp ../src/org.openrgb.OpenRGB BUILD/$deckuser/.local/share/flatpak/overrides
-    cp ../src/org.openrgb.OpenRGB BUILD/$rootuser/.local/share/flatpak/overrides
+    cp ../src/rgb-control.sh BUILD/usr/lib/systemd/system-sleep
+    cp ../src/rgb-control.service BUILD/usr/lib/systemd/system
+    cp ../src/*.orp BUILD/usr/share/steamos-rgb
+    cp ../src/org.openrgb.OpenRGB BUILD/usr/share/steamos-rgb
     
-    mkdir BUILD/DEBIAN
-    cp dpkg/* BUILD/DEBIAN
-    _template BUILD/DEBIAN/control
-    rm BUILD/DEBIAN/control.tpl
+    _template PKGBUILD
 }
 
 pkg() {
     echo "##### packaging"
     
-    dpkg-deb --build --root-owner-group BUILD && dpkg-name BUILD.deb
+    makepkg -f
 }
 
 clean() {
     echo "##### cleaning"
     rm -rf BUILD
-    rm -rf *.deb
+    rm -rf src
+    rm -rf pkg
+    rm -rf *.pkg.tar.zst
+    rm -rf PKGBUILD
 }
 
 if [ $# -eq 0 ]; then

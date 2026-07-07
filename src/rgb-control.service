@@ -1,0 +1,11 @@
+[Unit]
+Description=Init RGB status during bootup
+After=local-fs.target
+Wants=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/systemd/system-sleep/rgb-control.sh on
+
+[Install]
+WantedBy=multi-user.target

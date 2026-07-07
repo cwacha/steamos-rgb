@@ -1,3 +1,6 @@
 pkg/BUILD
-pkg/*.deb
+pkg/pkg
+pkg/src
+pkg/PKGBUILD
+pkg/*.pkg.tar.zst
 

@@ -1,0 +1,33 @@
+# arg 1:  the new package version
+post_install() {
+    deckuser=home/deck
+    rootuser=root
+
+	cp /usr/share/steamos-rgb/*.orp /$rootuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
+	cp /usr/share/steamos-rgb/*.orp /$deckuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB
+    cp /usr/share/steamos-rgb/org.openrgb.OpenRGB /$deckuser/.local/share/flatpak/overrides
+    cp /usr/share/steamos-rgb/org.openrgb.OpenRGB /$rootuser/.local/share/flatpak/overrides
+
+	systemctl enable rgb-control.service
+	# >/dev/null 2>&1 || true
+}
+
+# arg 1:  the new package version
+# arg 2:  the old package version
+post_upgrade() {
+	post_install
+}
+
+# arg 1:  the old package version
+pre_remove() {
+    deckuser=home/deck
+    rootuser=root
+
+	rm /$rootuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB/{on,off}.orp
+	rm /$deckuser/.var/app/org.openrgb.OpenRGB/config/OpenRGB/{on,off}.orp
+    rm /$deckuser/.local/share/flatpak/overrides/org.openrgb.OpenRGB
+    rm /$rootuser/.local/share/flatpak/overrides/org.openrgb.OpenRGB
+
+	systemctl disable rgb-control.service
+	# >/dev/null 2>&1 || true
+}

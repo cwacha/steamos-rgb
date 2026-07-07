@@ -3,11 +3,11 @@
 OPENRGB="flatpak run org.openrgb.OpenRGB --noautoconnect"
 
 case "$1" in
-    pre)
+    pre|off)
         # Before sleep
         $OPENRGB -p off
         ;;
-    post)
+    post|on)
         # After wake
         $OPENRGB -p on
         ;;
